@@ -2,6 +2,7 @@
 #include "Mom_PushButton.h" 
 
 #define DEBOUNCE_TIME 5
+#define MAX_MODE 2		//Needs to change if more modes are supported
 
 Mom_PushButton::Mom_PushButton(uint8_t input_pin, bool mode_number)
 {
@@ -15,14 +16,15 @@ Mom_PushButton::Mom_PushButton(uint8_t input_pin, bool mode_number)
 
 Mom_PushButton::Mom_PushButton(uint8_t input_pin, int mode_number, int modulus)
 {
-    _pin = input_pin; 
-	pinMode(input_pin, INPUT);
-	if(mode_number == 2 && (modulus >= 1) ) 
-	{
+    _pin = input_pin; //Set pin #
+	pinMode(input_pin, INPUT); //Initialize pinMode
+	m2_counter = 0; //Reset counter
+
+	if(mode_number <= MAX_MODE && mode_number >= 0) 
 		_mode = mode_number; 
+
+	if(modulus > 0)
 		_modulus = modulus+1;	//Modifies modulus so it counts the number of button presses up to and including the value of "modulus" 
-	} 
- 	m2_counter = 0;
 }
 
 int Mom_PushButton::getState()
@@ -78,7 +80,9 @@ void Mom_PushButton::debounceRead()
 		default: 
 			Serial.print("Warning: Button at pin "); 
 			Serial.print(_pin); 
-			Serial.println(" has undefined mode. Check that mode parameter is valid."); 
+			Serial.print(" defaulted to undefined mode ");
+			Serial.println(_mode);
+			Serial.println("Check that mode>=0 and modulus>0."); 
 			break; 
 	}
 	_prevState = _nextState; 

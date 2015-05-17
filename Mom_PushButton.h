@@ -38,7 +38,7 @@ class Mom_PushButton
     private:
 	int _pin = -1;  
  	int _mode = -1; 
- 	int _modulus = -1;
+ 	int _modulus = -1;		//Modulus should be greater than 0
 
 	bool _prevState = 0; 
 	bool _nextState = 0; 
